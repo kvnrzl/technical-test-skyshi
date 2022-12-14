@@ -20,5 +20,10 @@ func InitDBMysql() *gorm.DB {
 		panic(err)
 	}
 
+	err = db.AutoMigrate(&model.Todo{})
+	if err != nil {
+		panic(err)
+	}
+
 	return db
 }

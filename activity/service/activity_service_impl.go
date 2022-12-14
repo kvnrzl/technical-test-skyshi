@@ -42,7 +42,13 @@ func (a *ActivityServiceImpl) GetAll(ctx context.Context) ([]*model.Activity, er
 }
 
 func (a *ActivityServiceImpl) GetByID(ctx context.Context, id int64) (*model.Activity, error) {
-	return a.activityRepository.GetByID(ctx, a.db, id)
+	res, err := a.activityRepository.GetByID(ctx, a.db, id)
+	if err == gorm.ErrRecordNotFound {
+		model.IDNotFound = id
+		return nil, model.ErrActivityNotFound
+	}
+
+	return res, err
 }
 
 func (a *ActivityServiceImpl) Update(ctx context.Context, activity *model.Activity) (*model.Activity, error) {
@@ -60,7 +66,7 @@ func (a *ActivityServiceImpl) Update(ctx context.Context, activity *model.Activi
 		return nil, err
 	}
 
-	return a.GetByID(ctx, activity.ID)
+	return a.activityRepository.GetByID(ctx, a.db, activity.ID)
 }
 
 func (a *ActivityServiceImpl) Delete(ctx context.Context, id int64) error {

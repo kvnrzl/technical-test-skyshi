@@ -13,6 +13,9 @@ import (
 	"technical_test_skyshi/activity/service"
 	"technical_test_skyshi/database"
 	"technical_test_skyshi/router"
+	controller2 "technical_test_skyshi/todo/controller"
+	mysql2 "technical_test_skyshi/todo/repository/mysql"
+	service2 "technical_test_skyshi/todo/service"
 )
 
 // Injectors from injector.go:
@@ -22,6 +25,9 @@ func InitServer() *gin.Engine {
 	db := database.InitDBMysql()
 	activityService := service.NewActivityServiceImpl(activityRepository, db)
 	activityController := controller.NewActivityControllerImpl(activityService)
-	engine := router.SetupRouter(activityController)
+	todoRepository := mysql2.NewMysqlTodo()
+	todoService := service2.NewTodoServiceImpl(todoRepository, db)
+	todoController := controller2.NewTodoControllerImpl(todoService)
+	engine := router.SetupRouter(activityController, todoController)
 	return engine
 }

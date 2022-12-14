@@ -7,7 +7,6 @@ import (
 	"technical_test_skyshi/model"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type ActivityControllerImpl struct {
@@ -26,7 +25,7 @@ func (a *ActivityControllerImpl) Create(c *gin.Context) {
 
 	activity, err := a.activityService.Create(c, activity)
 	if err == model.ErrTitleRequired {
-		helper.ResponseErrTitleRequired(c, err.Error())
+		helper.ResponseBadRequest(c, err.Error())
 		return
 	}
 
@@ -35,7 +34,13 @@ func (a *ActivityControllerImpl) Create(c *gin.Context) {
 		return
 	}
 
-	helper.ResponseSuccess(c, activity)
+	helper.ResponseStatusCreated(c, &model.ActivityCreate{
+		CreatedAt: activity.CreatedAt,
+		UpdatedAt: activity.UpdatedAt,
+		ID:        activity.ID,
+		Title:     activity.Title,
+		Email:     activity.Email,
+	})
 }
 
 func (a *ActivityControllerImpl) GetAll(c *gin.Context) {
@@ -45,7 +50,7 @@ func (a *ActivityControllerImpl) GetAll(c *gin.Context) {
 		return
 	}
 
-	helper.ResponseSuccess(c, activities)
+	helper.ResponseStatusOK(c, activities)
 
 }
 
@@ -58,8 +63,8 @@ func (a *ActivityControllerImpl) GetByID(c *gin.Context) {
 	}
 
 	activity, err := a.activityService.GetByID(c, int64(activityID))
-	if err == gorm.ErrRecordNotFound {
-		helper.ResponseErrRecordNotFound(c, activityID)
+	if err == model.ErrActivityNotFound {
+		helper.ResponseRecordNotFound(c, err.Error())
 		return
 	}
 
@@ -68,7 +73,7 @@ func (a *ActivityControllerImpl) GetByID(c *gin.Context) {
 		return
 	}
 
-	helper.ResponseSuccess(c, activity)
+	helper.ResponseStatusOK(c, activity)
 }
 
 func (a *ActivityControllerImpl) Update(c *gin.Context) {
@@ -84,13 +89,13 @@ func (a *ActivityControllerImpl) Update(c *gin.Context) {
 	activity.ID = int64(activityID)
 
 	activity, err = a.activityService.Update(c, activity)
-	if err == gorm.ErrRecordNotFound {
-		helper.ResponseErrRecordNotFound(c, activityID)
+	if err == model.ErrActivityNotFound {
+		helper.ResponseRecordNotFound(c, err.Error())
 		return
 	}
 
 	if err == model.ErrTitleRequired {
-		helper.ResponseErrTitleRequired(c, err.Error())
+		helper.ResponseBadRequest(c, err.Error())
 		return
 	}
 
@@ -99,7 +104,7 @@ func (a *ActivityControllerImpl) Update(c *gin.Context) {
 		return
 	}
 
-	helper.ResponseSuccess(c, activity)
+	helper.ResponseStatusOK(c, activity)
 }
 
 func (a *ActivityControllerImpl) Delete(c *gin.Context) {
@@ -111,8 +116,8 @@ func (a *ActivityControllerImpl) Delete(c *gin.Context) {
 	}
 
 	err = a.activityService.Delete(c, int64(activityID))
-	if err == gorm.ErrRecordNotFound {
-		helper.ResponseErrRecordNotFound(c, activityID)
+	if err == model.ErrActivityNotFound {
+		helper.ResponseRecordNotFound(c, err.Error())
 		return
 	}
 
@@ -121,5 +126,5 @@ func (a *ActivityControllerImpl) Delete(c *gin.Context) {
 		return
 	}
 
-	helper.ResponseSuccess(c, struct{}{})
+	helper.ResponseStatusOK(c, struct{}{})
 }

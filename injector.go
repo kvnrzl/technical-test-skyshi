@@ -4,9 +4,14 @@
 package main
 
 import (
-	"technical_test_skyshi/activity/controller"
-	"technical_test_skyshi/activity/repository/mysql"
-	"technical_test_skyshi/activity/service"
+	activityController "technical_test_skyshi/activity/controller"
+	mysqlActivity "technical_test_skyshi/activity/repository/mysql"
+	activityService "technical_test_skyshi/activity/service"
+
+	todoController "technical_test_skyshi/todo/controller"
+	mysqlTodo "technical_test_skyshi/todo/repository/mysql"
+	todoService "technical_test_skyshi/todo/service"
+
 	"technical_test_skyshi/database"
 	"technical_test_skyshi/router"
 
@@ -18,9 +23,13 @@ func InitServer() *gin.Engine {
 	wire.Build(
 		database.InitDBMysql,
 
-		mysql.NewMysqlAcitivity,
-		service.NewActivityServiceImpl,
-		controller.NewActivityControllerImpl,
+		mysqlActivity.NewMysqlAcitivity,
+		activityService.NewActivityServiceImpl,
+		activityController.NewActivityControllerImpl,
+
+		mysqlTodo.NewMysqlTodo,
+		todoService.NewTodoServiceImpl,
+		todoController.NewTodoControllerImpl,
 
 		router.SetupRouter,
 	)
