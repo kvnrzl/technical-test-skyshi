@@ -1,4 +1,4 @@
-package app
+package database
 
 import (
 	"technical_test_skyshi/config"
@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitDB() *gorm.DB {
+func InitDBMysql() *gorm.DB {
 	dsn := config.DB_USERNAME + ":" + config.DB_PASSWORD + "@tcp(" + config.DB_HOST + ":" + config.DB_PORT + ")" + "/" + config.DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

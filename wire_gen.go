@@ -11,16 +11,17 @@ import (
 	"technical_test_skyshi/activity/controller"
 	"technical_test_skyshi/activity/repository/mysql"
 	"technical_test_skyshi/activity/service"
-	"technical_test_skyshi/app"
+	"technical_test_skyshi/database"
+	"technical_test_skyshi/router"
 )
 
 // Injectors from injector.go:
 
 func InitServer() *gin.Engine {
 	activityRepository := mysql.NewMysqlAcitivity()
-	db := app.InitDB()
+	db := database.InitDBMysql()
 	activityService := service.NewActivityServiceImpl(activityRepository, db)
 	activityController := controller.NewActivityControllerImpl(activityService)
-	engine := app.SetupRouter(activityController)
+	engine := router.SetupRouter(activityController)
 	return engine
 }

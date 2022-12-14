@@ -1,4 +1,4 @@
-package app
+package router
 
 import (
 	"technical_test_skyshi/activity/controller"
@@ -8,7 +8,8 @@ import (
 
 func SetupRouter(activityController controller.ActivityController) *gin.Engine {
 	router := gin.Default()
-	// router.Use(CORSMiddleware())
+
+	router.Use(Middleware())
 
 	router.GET("/", func(r *gin.Context) {
 		r.JSON(200, "API service is ready!")

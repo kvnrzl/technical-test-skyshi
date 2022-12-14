@@ -5,6 +5,7 @@ import (
 	"technical_test_skyshi/activity/repository"
 	"technical_test_skyshi/model"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -25,8 +26,12 @@ func (a *ActivityServiceImpl) Create(ctx context.Context, activity *model.Activi
 		return nil, model.ErrTitleRequired
 	}
 
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return nil, err
+	}
 	if activity.Email == "" {
-		activity.Email = "no email"
+		activity.Email = id.String() + "@skyshi.com"
 	}
 
 	return a.activityRepository.Create(ctx, a.db, activity)
