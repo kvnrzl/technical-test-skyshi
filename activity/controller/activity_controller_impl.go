@@ -121,5 +121,5 @@ func (a *ActivityControllerImpl) Delete(c *gin.Context) {
 		return
 	}
 
-	helper.ResponseSuccess(c, nil)
+	helper.ResponseSuccess(c, struct{}{})
 }
