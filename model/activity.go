@@ -24,5 +24,5 @@ type ActivityCreate struct {
 }
 
 func (a *Activity) TableName() string {
-	return "activity"
+	return "activities"
 }
