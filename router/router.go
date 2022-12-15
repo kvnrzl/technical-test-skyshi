@@ -21,8 +21,8 @@ func SetupRouter(
 
 	activity := router.Group("/activity-groups")
 	{
-		activity.POST("/", activityController.Create)
-		activity.GET("/", activityController.GetAll)
+		activity.POST("", activityController.Create)
+		activity.GET("", activityController.GetAll)
 		activity.GET("/:id", activityController.GetByID)
 		activity.PATCH("/:id", activityController.Update)
 		activity.DELETE("/:id", activityController.Delete)
@@ -30,8 +30,8 @@ func SetupRouter(
 
 	todo := router.Group("/todo-items")
 	{
-		todo.POST("/", todoController.Create)
-		todo.GET("/", todoController.GetAll)
+		todo.POST("", todoController.Create)
+		todo.GET("", todoController.GetAll)
 		todo.GET("/:id", todoController.GetByID)
 		todo.PATCH("/:id", todoController.Update)
 		todo.DELETE("/:id", todoController.Delete)

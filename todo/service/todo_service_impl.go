@@ -73,13 +73,15 @@ func (s *TodoServiceImpl) GetAll(ctx context.Context, queryParams string) ([]*mo
 }
 
 func (s *TodoServiceImpl) GetByID(ctx context.Context, id int64) (*model.Todo, error) {
-	res, err := s.todoRepository.GetByID(ctx, s.db, id)
-	if err == gorm.ErrRecordNotFound {
-		model.IDNotFound = id
-		return nil, model.ErrTodoNotFound
-	}
+	return s.todoRepository.GetByID(ctx, s.db, id)
 
-	return res, err
+	// res, err := s.todoRepository.GetByID(ctx, s.db, id)
+	// if err == gorm.ErrRecordNotFound {
+	// 	model.IDNotFound = id
+	// 	return nil, model.ErrTodoNotFound
+	// }
+
+	// return res, err
 }
 
 func (s *TodoServiceImpl) Update(ctx context.Context, todo *model.Todo) (*model.Todo, error) {

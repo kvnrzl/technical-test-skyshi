@@ -7,6 +7,7 @@ import (
 	"technical_test_skyshi/todo/service"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type TodoControllerImpl struct {
@@ -61,9 +62,10 @@ func (t *TodoControllerImpl) GetByID(c *gin.Context) {
 		return
 	}
 
-	todo, err := t.todoService.GetByID(c, int64(parseID))
-	if err == model.ErrTodoNotFound {
-		helper.ResponseRecordNotFound(c, err.Error())
+	parseID64 := int64(parseID)
+	todo, err := t.todoService.GetByID(c, parseID64)
+	if err == gorm.ErrRecordNotFound {
+		helper.ResponseTodoNotFound(c, parseID64)
 		return
 	}
 
@@ -88,8 +90,8 @@ func (t *TodoControllerImpl) Update(c *gin.Context) {
 	todo.ID = int64(parseID)
 
 	todo, err = t.todoService.Update(c, todo)
-	if err == model.ErrTodoNotFound {
-		helper.ResponseRecordNotFound(c, err.Error())
+	if err == gorm.ErrRecordNotFound {
+		helper.ResponseTodoNotFound(c, int64(parseID))
 		return
 	}
 
@@ -109,9 +111,10 @@ func (t *TodoControllerImpl) Delete(c *gin.Context) {
 		return
 	}
 
-	err = t.todoService.Delete(c, int64(parseID))
-	if err == model.ErrTodoNotFound {
-		helper.ResponseRecordNotFound(c, err.Error())
+	parseID64 := int64(parseID)
+	err = t.todoService.Delete(c, parseID64)
+	if err == gorm.ErrRecordNotFound {
+		helper.ResponseTodoNotFound(c, parseID64)
 		return
 	}
 

@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: mysql_db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: 'technical_test_skyshi'
+    volumes:
+      - todo_activity_volume:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - todo_activity_network
+  
+  backend:
+    environment:
+      - MYSQL_HOST=mysql_db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DBNAME=technical_test_skyshi
+    container_name: backend
+    image: app-todo-backend
+    restart: always
+    ports:
+      - "3030:3030"
+    networks:
+      - todo_activity_network
+    depends_on:
+      - db
+    
+networks:
+  todo_activity_network:
+    name: todo_activity_network
+
+volumes:
+  todo_activity_volume:

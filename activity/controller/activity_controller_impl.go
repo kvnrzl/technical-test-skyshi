@@ -7,6 +7,7 @@ import (
 	"technical_test_skyshi/model"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type ActivityControllerImpl struct {
@@ -62,9 +63,11 @@ func (a *ActivityControllerImpl) GetByID(c *gin.Context) {
 		return
 	}
 
-	activity, err := a.activityService.GetByID(c, int64(activityID))
-	if err == model.ErrActivityNotFound {
-		helper.ResponseRecordNotFound(c, err.Error())
+	parseID := int64(activityID)
+	activity, err := a.activityService.GetByID(c, parseID)
+	// if err == model.ErrActivityNotFound {
+	if err == gorm.ErrRecordNotFound {
+		helper.ResponseActivityNotFound(c, parseID)
 		return
 	}
 
@@ -89,8 +92,8 @@ func (a *ActivityControllerImpl) Update(c *gin.Context) {
 	activity.ID = int64(activityID)
 
 	activity, err = a.activityService.Update(c, activity)
-	if err == model.ErrActivityNotFound {
-		helper.ResponseRecordNotFound(c, err.Error())
+	if err == gorm.ErrRecordNotFound {
+		helper.ResponseActivityNotFound(c, int64(activityID))
 		return
 	}
 
@@ -115,9 +118,11 @@ func (a *ActivityControllerImpl) Delete(c *gin.Context) {
 		return
 	}
 
-	err = a.activityService.Delete(c, int64(activityID))
-	if err == model.ErrActivityNotFound {
-		helper.ResponseRecordNotFound(c, err.Error())
+	parseID := int64(activityID)
+	err = a.activityService.Delete(c, parseID)
+	// if err == model.ErrActivityNotFound {
+	if err == gorm.ErrRecordNotFound {
+		helper.ResponseActivityNotFound(c, parseID)
 		return
 	}
 

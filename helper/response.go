@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"fmt"
 	"net/http"
 	"technical_test_skyshi/model"
 
@@ -19,6 +20,22 @@ func ResponseRecordNotFound(c *gin.Context, message string) {
 	c.JSON(http.StatusNotFound, model.ResponseError{
 		Status:  http.StatusText(http.StatusNotFound),
 		Message: message,
+		Data:    struct{}{},
+	})
+}
+
+func ResponseActivityNotFound(c *gin.Context, IDNotFound int64) {
+	c.JSON(http.StatusNotFound, model.ResponseError{
+		Status:  http.StatusText(http.StatusNotFound),
+		Message: fmt.Errorf("Activity with ID %d Not Found", IDNotFound).Error(),
+		Data:    struct{}{},
+	})
+}
+
+func ResponseTodoNotFound(c *gin.Context, IDNotFound int64) {
+	c.JSON(http.StatusNotFound, model.ResponseError{
+		Status:  http.StatusText(http.StatusNotFound),
+		Message: fmt.Errorf("Todo with ID %d Not Found", IDNotFound).Error(),
 		Data:    struct{}{},
 	})
 }
