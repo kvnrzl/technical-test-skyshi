@@ -23,7 +23,7 @@ services:
       - MYSQL_PASSWORD=
       - MYSQL_DBNAME=technical_test_skyshi
     container_name: backend
-    image: app-todo-backend-golang
+    image: todo-list-api-backend-golang
     restart: always
     ports:
       - "3030:3030"
